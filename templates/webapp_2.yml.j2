@@ -1,0 +1,12 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+{% for instance in ec2 %}
+  "{{ instance }}":
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: "{{ ec2[instance].image_id }}"
+      InstanceType: "{{ ec2[instance].instance_type }}"
+      KeyName: "{{ ec2[instance].keyname }}"
+      SubnetId: "{{ ec2[instance].subnet }}"
+{% endfor %}

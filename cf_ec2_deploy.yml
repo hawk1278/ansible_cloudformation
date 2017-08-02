@@ -1,0 +1,39 @@
+# An example showing how to dynamically generate CloudFormation templates
+# then deploy resources from those templates.  This should be 
+# expanded to include additional parameters
+
+- name: Provision stack
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  vars_files:
+    - "aws_webservers.yml"
+  vars:
+    stack_name: TEST01
+    aws_region: us-east-1
+    state: present
+  tasks:
+  - name: Render Template
+    template: src=webapp_2.yml.j2 dest=templates/webapp_new.yml    # Generate template from vars file that was pulled in
+  - name: launch ansible cloudformation example
+    run_once: true
+    cloudformation:
+      stack_name: "{{ stack_name }}"
+      state: "{{ state }}"
+      region: "{{ aws_region }}"
+      disable_rollback: false
+      template: templates/webapp_new.yml
+  #    template_parameters:
+  #      KeyName: "{{ aws_key }}"
+  #      InstanceType: "{{aws_instance_type }}"
+  #      Environment: "{{ env }}"
+  #      SecurityGroup: "{{ item.sg_name}}"
+  #      Subnet: "{{ item.subnet }}"
+  #      Function: "{{ function }}"
+  #      POC: "{{ poc }}"
+  #      Backup: "{{ backup }}"
+  #      Security: "{{ security_info }}"
+  #      Name: "{{ instance_name }}"
+  #      AMIID: "{{ ami_id }}"
+      tags:
+        Stack: "{{ stack_name }}"

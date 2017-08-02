@@ -1,0 +1,13 @@
+# Vars file for dymaically building CloudFormation templates
+---
+ec2:
+  web01:
+    image_id: ami-643b1972
+    keyname: myec2key
+    subnet: subnet-e130a6cb
+    instance_type: t2.micro
+  web02:
+    image_id: ami-643b1972
+    keyname: myec2key
+    subnet: subnet-3c2a6a4a
+    instance_type: t2.micro
